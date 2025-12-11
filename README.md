@@ -11,12 +11,6 @@ A web-based attendance management system for tracking student attendance.
 - 📊 Attendance statistics and reports
 - 📱 Mobile-responsive design
 
-## Default Credentials
-
-- **Admin**: `admin` / `admin123`
-- **Teacher**: `teacher` / `teacher123`
-- **Student**: `student` / `student123`
-
 ## Local Development
 
 1. Install dependencies:
@@ -30,23 +24,6 @@ A web-based attendance management system for tracking student attendance.
    ```
 
 3. Open http://localhost:3000
-
-## Deployment
-
-This app can be deployed to:
-- Render (recommended for free hosting)
-- Railway
-- Heroku
-- Any Node.js hosting platform
-
-### Deploy to Render
-
-1. Push your code to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click "New" → "Web Service"
-4. Connect your GitHub repository
-5. Render will automatically detect the `render.yaml` configuration
-6. Click "Create Web Service"
 
 ### Environment Variables
 
