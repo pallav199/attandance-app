@@ -8,8 +8,13 @@
 </head>
 <body data-canmark="<%= canMark ? '1' : '0' %>">
   <div class="container">
-    <h1>Dashboard</h1>
-    <p><a href="/logout">Logout</a></p>
+    <div class="app-header">
+      <h1>📊 ATTENDANCE DASHBOARD</h1>
+    </div>
+    <p style="text-align: center;">
+      <a href="/change-password" style="margin-right: 15px;">🔑 Change Password</a>
+      <a href="/logout">🚪 Logout</a>
+    </p>
 
     <% if (students && students.length) { %>
       <div class="dashboard-layout">

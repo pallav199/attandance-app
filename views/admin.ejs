@@ -8,8 +8,13 @@
 </head>
 <body>
   <div class="container">
-    <h1>Admin Dashboard</h1>
-    <p><a href="/logout">Logout</a></p>
+    <div class="app-header">
+      <h1>👨‍💼 ADMIN DASHBOARD</h1>
+    </div>
+    <p style="text-align: center;">
+      <a href="/change-password" style="margin-right: 15px;">🔑 Change Password</a>
+      <a href="/logout">🚪 Logout</a>
+    </p>
     <% if (message) { %>
       <p class="info"><%= message %></p>
     <% } %>

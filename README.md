@@ -10,6 +10,9 @@ A web-based attendance management system for tracking student attendance.
 - 📅 Calendar view with monthly summaries
 - 📊 Attendance statistics and reports
 - 📱 Mobile-responsive design
+- 🎨 Beautiful animations and modern UI
+- 🔑 Password management (Forgot & Change Password)
+- 🔐 Secure authentication with bcrypt
 
 ## Local Development
 

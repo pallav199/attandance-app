@@ -71,6 +71,134 @@ app.get('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/login'));
 });
 
+// Forgot Password Routes
+app.get('/forgot-password', (req, res) => {
+  res.render('forgot_password', { error: null, message: null });
+});
+
+app.post('/forgot-password', async (req, res) => {
+  const { username, newPassword, confirmPassword } = req.body;
+
+  if (!username || !newPassword || !confirmPassword) {
+    return res.render('forgot_password', {
+      error: 'All fields are required',
+      message: null
+    });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.render('forgot_password', {
+      error: 'Passwords do not match',
+      message: null
+    });
+  }
+
+  if (newPassword.length < 6) {
+    return res.render('forgot_password', {
+      error: 'Password must be at least 6 characters long',
+      message: null
+    });
+  }
+
+  try {
+    const db = await openDb();
+    const user = await db.get('SELECT * FROM users WHERE username = ?', username);
+
+    if (!user) {
+      return res.render('forgot_password', {
+        error: 'Username not found',
+        message: null
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await db.run('UPDATE users SET password_hash = ? WHERE username = ?', hashedPassword, username);
+
+    res.render('forgot_password', {
+      error: null,
+      message: 'Password reset successfully! You can now login with your new password.'
+    });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.render('forgot_password', {
+      error: 'An error occurred. Please try again.',
+      message: null
+    });
+  }
+});
+
+// Change Password Routes
+app.get('/change-password', requireAuth, (req, res) => {
+  res.render('change_password', { error: null, message: null, user: req.session.user });
+});
+
+app.post('/change-password', requireAuth, async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  const userId = req.session.user.id;
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.render('change_password', {
+      error: 'All fields are required',
+      message: null,
+      user: req.session.user
+    });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.render('change_password', {
+      error: 'New passwords do not match',
+      message: null,
+      user: req.session.user
+    });
+  }
+
+  if (newPassword.length < 6) {
+    return res.render('change_password', {
+      error: 'Password must be at least 6 characters long',
+      message: null,
+      user: req.session.user
+    });
+  }
+
+  try {
+    const db = await openDb();
+    const user = await db.get('SELECT * FROM users WHERE id = ?', userId);
+
+    if (!user) {
+      return res.render('change_password', {
+        error: 'User not found',
+        message: null,
+        user: req.session.user
+      });
+    }
+
+    const isValidPassword = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isValidPassword) {
+      return res.render('change_password', {
+        error: 'Current password is incorrect',
+        message: null,
+        user: req.session.user
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await db.run('UPDATE users SET password_hash = ? WHERE id = ?', hashedPassword, userId);
+
+    res.render('change_password', {
+      error: null,
+      message: 'Password changed successfully!',
+      user: req.session.user
+    });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.render('change_password', {
+      error: 'An error occurred. Please try again.',
+      message: null,
+      user: req.session.user
+    });
+  }
+});
+
 // Admin routes
 // ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
