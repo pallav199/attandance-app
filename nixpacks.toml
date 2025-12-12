@@ -2,10 +2,10 @@
 nixPkgs = ["nodejs"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["rm -rf node_modules", "npm install"]
 
 [phases.build]
-cmds = ["echo 'Build complete - v2.0.0'"]
+cmds = ["echo '=== Building Attendance App v2.0.0 ==='", "echo '=== With Professional UI and Animations ==='"]
 
 [start]
-cmd = "npm start"
+cmd = "bash railway-start.sh"
